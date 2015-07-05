@@ -8,18 +8,18 @@ import java.util.List;
 public class Message implements Serializable {
 
     @JsonProperty("message_id")
-    public long messageID;
+    public Long messageID;
 
     @JsonProperty("from")
     public User from;
 
-    public long date;
+    public Long date;
 
     public User chat;
 
     public User forwardFrom;
 
-    public long forwardDate;
+    public Long forwardDate;
 
     @JsonProperty("reply_to_message")
     public Message replyToMessage;
@@ -95,12 +95,12 @@ public class Message implements Serializable {
 
         Message message = (Message) o;
 
-        return messageID == message.messageID;
+        return messageID.equals(message.messageID);
 
     }
 
     @Override
     public int hashCode() {
-        return (int) (messageID ^ (messageID >>> 32));
+        return messageID.hashCode();
     }
 }

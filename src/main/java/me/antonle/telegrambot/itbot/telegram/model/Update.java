@@ -7,7 +7,7 @@ import java.io.Serializable;
 public class Update implements Serializable {
 
     @JsonProperty("update_id")
-    public long updateID;
+    public Long updateID;
 
     public Message message;
 
@@ -21,13 +21,13 @@ public class Update implements Serializable {
 
         Update update = (Update) o;
 
-        return updateID == update.updateID;
+        return updateID.equals(update.updateID);
 
     }
 
     @Override
     public int hashCode() {
-        return (int) (updateID ^ (updateID >>> 32));
+        return updateID.hashCode();
     }
 
     @Override

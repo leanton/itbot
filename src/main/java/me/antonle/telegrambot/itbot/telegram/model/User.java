@@ -6,7 +6,7 @@ import java.io.Serializable;
 
 public class User implements Serializable {
 
-    public long id;
+    public Long id;
 
     @JsonProperty("first_name")
     public String firstName;
@@ -37,12 +37,12 @@ public class User implements Serializable {
 
         User user = (User) o;
 
-        return id == user.id;
+        return id.equals(user.id);
 
     }
 
     @Override
     public int hashCode() {
-        return (int) (id ^ (id >>> 32));
+        return id.hashCode();
     }
 }
