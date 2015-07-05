@@ -3,7 +3,7 @@ package me.antonle.telegrambot.itbot.telegram.model;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.io.Serializable;
-import java.util.List;
+import java.util.ArrayList;
 
 public class Message implements Serializable {
 
@@ -30,7 +30,7 @@ public class Message implements Serializable {
 
     public Document document;
 
-    public List<PhotoSize> photo;
+    public ArrayList<PhotoSize> photo;
 
     public Sticker sticker;
 
@@ -50,7 +50,7 @@ public class Message implements Serializable {
     public String newChatTitle;
 
     @JsonProperty("new_chat_photo")
-    public List<PhotoSize> newChatPhoto;
+    public ArrayList<PhotoSize> newChatPhoto;
 
     @JsonProperty("delete_chat_photo")
     public boolean deleteChatPhoto;
