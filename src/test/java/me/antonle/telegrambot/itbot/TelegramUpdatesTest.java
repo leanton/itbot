@@ -34,7 +34,6 @@ public class TelegramUpdatesTest {
     public void test_incomingUpdates() {
         RestTemplate restTemplate = new RestTemplate();
         ResponseEntity<String> entity = restTemplate.getForEntity(updateUrl, String.class);
-
         System.out.println(entity);
     }
 
