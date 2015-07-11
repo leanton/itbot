@@ -18,7 +18,7 @@ import static org.junit.Assert.assertEquals;
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = ITTelegramBotApplication.class)
 @WebAppConfiguration
-public class TelegramUpdatesCheck {
+public class TelegramUpdatesTest {
 
     @Autowired
     private BotProperties botProperties;
@@ -34,7 +34,6 @@ public class TelegramUpdatesCheck {
     public void test_incomingUpdates() {
         RestTemplate restTemplate = new RestTemplate();
         ResponseEntity<String> entity = restTemplate.getForEntity(updateUrl, String.class);
-
         System.out.println(entity);
     }
 
