@@ -42,5 +42,4 @@ crashlytics.properties
 crashlytics-build.properties
 
 ### Other
-resources/application*.properties
 src/main/resources/*.properties
