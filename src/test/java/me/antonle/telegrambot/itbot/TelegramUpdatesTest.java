@@ -18,7 +18,7 @@ import static org.junit.Assert.assertEquals;
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = ITTelegramBotApplication.class)
 @WebAppConfiguration
-public class TelegramUpdatesCheck {
+public class TelegramUpdatesTest {
 
     @Autowired
     private BotProperties botProperties;
