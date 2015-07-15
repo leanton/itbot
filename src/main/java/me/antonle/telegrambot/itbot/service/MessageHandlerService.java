@@ -31,17 +31,17 @@ public class MessageHandlerService {
     public void handle(Update update) {
         MultiValueMap<String, Object> form = new LinkedMultiValueMap<>();
         form.add("chat_id", update.message.chat.id);
-        form.add("text", generateReply(update.message.text));
+        form.add("text", encodeCyrillic(generateReply(update.message.text)));
         form.add("reply_to_message_id", update.message.messageID);
         restTemplate.postForLocation(sendMessageURI, form);
         LOG.info("Sent reply: " + form);
     }
 
-    private String generateReply(String text) {
+    String generateReply(String text) {
         if (text.toLowerCase().contains("не пашет")) {
-            return encodeCyrillic("ПАШИ СУКА");
+            return "ПАШИ СУКА";
         }
-        return encodeCyrillic("Посоны, мы пока в КС играем, сорян!");
+        return "Посоны, мы пока в КС играем, сорян!";
     }
 
     private String encodeCyrillic(String reply) {
