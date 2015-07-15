@@ -16,6 +16,7 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import javax.annotation.PostConstruct;
+import java.io.UnsupportedEncodingException;
 import java.util.concurrent.atomic.AtomicLong;
 
 @Component
@@ -30,6 +31,9 @@ public class EventReceiver {
     private BotProperties botProperties;
     @Autowired
     private RestTemplate restTemplate;
+    @Autowired
+    private MessageHandlerService messageHandler;
+
     private AtomicLong eventID = new AtomicLong(0L);
     private String getUpdatesURI = null;
     private String sendMessageURI = null;
@@ -59,19 +63,8 @@ public class EventReceiver {
         Updates updates = responseEntity.getBody();
         for (Update update : updates.result) {
             LOG.info("Received update: " + update);
-            sendDummyReply(update);
+            messageHandler.handle(update);
             eventID.set(update.updateID + 1);
         }
     }
-
-    private void sendDummyReply(Update update) {
-        MultiValueMap<String, Object> form = new LinkedMultiValueMap<>();
-        form.add("chat_id", update.message.chat.id);
-        form.add("text", "Sorry, the IT support doesn't work for now");
-        form.add("reply_to_message_id", update.message.messageID);
-        restTemplate.postForLocation(sendMessageURI, form);
-        LOG.info("Sent reply: " + form);
-    }
-
-
 }

@@ -38,6 +38,9 @@ public class MessageHandlerService {
     }
 
     private String generateReply(String text) {
+        if (text.toLowerCase().contains("не пашет")) {
+            return encodeCyrillic("ПАШИ СУКА");
+        }
         return encodeCyrillic("Посоны, мы пока в КС играем, сорян!");
     }
 
