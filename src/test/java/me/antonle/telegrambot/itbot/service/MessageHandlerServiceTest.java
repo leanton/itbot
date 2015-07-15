@@ -1,17 +1,20 @@
 package me.antonle.telegrambot.itbot.service;
 
-import junit.framework.TestCase;
+import org.junit.Before;
+import org.junit.Test;
 
-public class MessageHandlerServiceTest extends TestCase {
+import static org.junit.Assert.assertEquals;
+
+public class MessageHandlerServiceTest {
 
     private MessageHandlerService messageHandlerService;
 
-    @Override
+    @Before
     public void setUp() throws Exception {
-        super.setUp();
         messageHandlerService = new MessageHandlerService();
     }
 
+    @Test
     public void testGenerateReply_ПашиСука() throws Exception {
         String text = "Парни, комп не пашет";
         assertEquals("ПАШИ СУКА", messageHandlerService.generateReply(text));
