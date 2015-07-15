@@ -36,7 +36,6 @@ public class EventReceiver {
 
     private AtomicLong eventID = new AtomicLong(0L);
     private String getUpdatesURI = null;
-    private String sendMessageURI = null;
 
     private static final Logger LOG = Logger.getLogger(EventReceiver.class);
 
@@ -44,7 +43,6 @@ public class EventReceiver {
     public void init() {
         try {
             getUpdatesURI = botProperties.getApi() + "/getUpdates";
-            sendMessageURI = botProperties.getApi() + "/sendMessage";
         } catch (NullPointerException e) {
             LOG.error("Token not found, failed to create request");
             e.printStackTrace();
