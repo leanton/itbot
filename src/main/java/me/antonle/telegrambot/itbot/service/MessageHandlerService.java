@@ -1,23 +1,30 @@
 package me.antonle.telegrambot.itbot.service;
 
-import me.antonle.telegrambot.itbot.BotProperties;
+import me.antonle.telegrambot.itbot.properties.BotProperties;
 import me.antonle.telegrambot.itbot.telegram.model.Update;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Service;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
 import javax.annotation.PostConstruct;
+import javax.annotation.Resource;
 import java.io.UnsupportedEncodingException;
 
 @Service
 public class MessageHandlerService {
 
+    @Bean(name = "senderRestTemplate")
+    public RestTemplate restTemplate() {
+        return new RestTemplate();
+    }
+
     private static final Logger LOG = Logger.getLogger(MessageHandlerService.class);
 
-    @Autowired
+    @Resource(name = "senderRestTemplate")
     private RestTemplate restTemplate;
     @Autowired
     private BotProperties botProperties;
@@ -32,6 +39,7 @@ public class MessageHandlerService {
         MultiValueMap<String, Object> form = new LinkedMultiValueMap<>();
         form.add("chat_id", update.message.chat.id);
         form.add("text", encodeCyrillic(generateReply(update.message.text)));
+        form.add("cyrillic_text", generateReply(update.message.text));
         form.add("reply_to_message_id", update.message.messageID);
         restTemplate.postForLocation(sendMessageURI, form);
         LOG.info("Sent reply: " + form);

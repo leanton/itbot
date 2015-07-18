@@ -1,6 +1,7 @@
 package me.antonle.telegrambot.itbot.service;
 
-import me.antonle.telegrambot.itbot.BotProperties;
+import me.antonle.telegrambot.itbot.properties.BotProperties;
+import me.antonle.telegrambot.itbot.disruptor.UpdateDisruptor;
 import me.antonle.telegrambot.itbot.telegram.model.Update;
 import me.antonle.telegrambot.itbot.telegram.model.Updates;
 import org.apache.log4j.Logger;
@@ -10,29 +11,27 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.http.*;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
-import org.springframework.util.LinkedMultiValueMap;
-import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import javax.annotation.PostConstruct;
-import java.io.UnsupportedEncodingException;
+import javax.annotation.Resource;
 import java.util.concurrent.atomic.AtomicLong;
 
 @Component
 public class EventReceiver {
 
-    @Bean
+    @Bean(name = "receiverRestTemplate")
     public RestTemplate restTemplate() {
         return new RestTemplate();
     }
 
     @Autowired
     private BotProperties botProperties;
-    @Autowired
+    @Resource(name = "receiverRestTemplate")
     private RestTemplate restTemplate;
     @Autowired
-    private MessageHandlerService messageHandler;
+    private UpdateDisruptor disruptor;
 
     private AtomicLong eventID = new AtomicLong(0L);
     private String getUpdatesURI = null;
@@ -61,7 +60,7 @@ public class EventReceiver {
         Updates updates = responseEntity.getBody();
         for (Update update : updates.result) {
             LOG.info("Received update: " + update);
-            messageHandler.handle(update);
+            disruptor.processEvent(update);
             eventID.set(update.updateID + 1);
         }
     }

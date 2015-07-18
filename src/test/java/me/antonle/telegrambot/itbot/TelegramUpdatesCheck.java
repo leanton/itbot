@@ -1,5 +1,6 @@
 package me.antonle.telegrambot.itbot;
 
+import me.antonle.telegrambot.itbot.properties.BotProperties;
 import me.antonle.telegrambot.itbot.telegram.model.Message;
 import me.antonle.telegrambot.itbot.telegram.model.Update;
 import me.antonle.telegrambot.itbot.telegram.model.Updates;
