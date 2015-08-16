@@ -44,6 +44,7 @@ public class UpdateDisruptor {
         disruptor = new Disruptor<>(UpdateEvent::new, disruptorProperties.getBufferSize(), executor);
         disruptor.handleEventsWith(this::handleEvent);
         disruptor.start();
+        LOG.info("Disruptor is started successfully");
     }
 
     public void processEvent(Update update) {
