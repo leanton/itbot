@@ -24,8 +24,6 @@ public class UpdateDisruptor {
     @Autowired
     private UpdateDisruptorProperties disruptorProperties;
 
-    private static final Logger LOG = Logger.getLogger(UpdateDisruptor.class);
-
     public UpdateDisruptor() {
     }
 
@@ -44,7 +42,6 @@ public class UpdateDisruptor {
         disruptor = new Disruptor<>(UpdateEvent::new, disruptorProperties.getBufferSize(), executor);
         disruptor.handleEventsWith(this::handleEvent);
         disruptor.start();
-        LOG.info("Disruptor is started successfully");
     }
 
     public void processEvent(Update update) {
