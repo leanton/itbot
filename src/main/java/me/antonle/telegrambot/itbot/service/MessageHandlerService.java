@@ -16,7 +16,6 @@ import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
-import java.math.BigDecimal;
 
 @Service
 public class MessageHandlerService {
@@ -39,7 +38,7 @@ public class MessageHandlerService {
         sendMessageURI = botProperties.getApi() + "/sendMessage";
     }
 
-    public void handle(Update update) throws IOException {
+    public void handle(Update update) {
         MultiValueMap<String, Object> form = new LinkedMultiValueMap<>();
         form.add("chat_id", update.message.chat.id);
         form.add("text", encodeCyrillic(generateReply(update.message.text)));
@@ -49,14 +48,21 @@ public class MessageHandlerService {
         LOG.info("Sent reply: " + form);
     }
 
-    String generateReply(String text) throws IOException {
+    String generateReply(String text) {
         if (text.toLowerCase().contains("не пашет")) {
             return "ПАШИ СУКА";
         }
         Currency currency = Currency.containCurrency(text);
         if (currency != null) {
             StringBuilder stringBuilder = new StringBuilder(currency.getKey()).append(" нынче по ");
-            BigDecimal price = YahooFinance.getFx(currency.getValue()).getPrice();
+            String price = null;
+            try {
+                price = YahooFinance.getFx(currency.getValue()).getPrice().toString();
+            } catch (IOException e) {
+                LOG.error("Error getting FX rate for " + currency.getValue());
+                e.printStackTrace();
+                price = "хрен знает сколько";
+            }
             stringBuilder.append(price);
             return stringBuilder.toString();
         }

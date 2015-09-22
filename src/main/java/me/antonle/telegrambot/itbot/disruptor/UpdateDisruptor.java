@@ -32,12 +32,7 @@ public class UpdateDisruptor {
 
     private void handleEvent(UpdateEvent event, long sequence, boolean endOfBatch) {
         Update update = event.getUpdate();
-        try {
-            messageHandler.handle(update);
-        } catch (IOException e) {
-            LOG.error("Error handling update " + update);
-            e.printStackTrace();
-        }
+        messageHandler.handle(update);
     }
 
     private void translate(UpdateEvent event, long sequence, Update update) {
