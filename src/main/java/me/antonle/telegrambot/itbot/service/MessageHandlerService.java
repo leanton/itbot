@@ -55,7 +55,7 @@ public class MessageHandlerService {
         Currency currency = Currency.containCurrency(text);
         if (currency != null) {
             StringBuilder stringBuilder = new StringBuilder(currency.getKey()).append(" нынче по ");
-            String price = null;
+            String price;
             try {
                 price = YahooFinance.getFx(currency.getValue()).getPrice().toString();
             } catch (IOException e) {
