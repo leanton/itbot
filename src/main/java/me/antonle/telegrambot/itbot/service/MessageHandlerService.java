@@ -1,6 +1,7 @@
 package me.antonle.telegrambot.itbot.service;
 
 import me.antonle.telegrambot.itbot.properties.BotProperties;
+import me.antonle.telegrambot.itbot.properties.Currency;
 import me.antonle.telegrambot.itbot.telegram.model.Update;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,10 +10,13 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
+import yahoofinance.YahooFinance;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.math.BigDecimal;
 
 @Service
 public class MessageHandlerService {
@@ -35,7 +39,7 @@ public class MessageHandlerService {
         sendMessageURI = botProperties.getApi() + "/sendMessage";
     }
 
-    public void handle(Update update) {
+    public void handle(Update update) throws IOException {
         MultiValueMap<String, Object> form = new LinkedMultiValueMap<>();
         form.add("chat_id", update.message.chat.id);
         form.add("text", encodeCyrillic(generateReply(update.message.text)));
@@ -45,9 +49,16 @@ public class MessageHandlerService {
         LOG.info("Sent reply: " + form);
     }
 
-    String generateReply(String text) {
+    String generateReply(String text) throws IOException {
         if (text.toLowerCase().contains("не пашет")) {
             return "ПАШИ СУКА";
+        }
+        Currency currency = Currency.containCurrency(text);
+        if (currency != null) {
+            StringBuilder stringBuilder = new StringBuilder(currency.getKey()).append(" нынче по ");
+            BigDecimal price = YahooFinance.getFx(currency.getValue()).getPrice();
+            stringBuilder.append(price);
+            return stringBuilder.toString();
         }
         return "Посоны, мы пока в КС играем, сорян!";
     }

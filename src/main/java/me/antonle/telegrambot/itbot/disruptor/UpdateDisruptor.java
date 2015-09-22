@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
+import java.io.IOException;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
@@ -31,7 +32,12 @@ public class UpdateDisruptor {
 
     private void handleEvent(UpdateEvent event, long sequence, boolean endOfBatch) {
         Update update = event.getUpdate();
-        messageHandler.handle(update);
+        try {
+            messageHandler.handle(update);
+        } catch (IOException e) {
+            LOG.error("Error handling update " + update);
+            e.printStackTrace();
+        }
     }
 
     private void translate(UpdateEvent event, long sequence, Update update) {
