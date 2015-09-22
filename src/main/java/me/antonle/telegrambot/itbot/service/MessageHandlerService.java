@@ -1,6 +1,7 @@
 package me.antonle.telegrambot.itbot.service;
 
 import me.antonle.telegrambot.itbot.properties.BotProperties;
+import me.antonle.telegrambot.itbot.properties.Currency;
 import me.antonle.telegrambot.itbot.telegram.model.Update;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,9 +10,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
+import yahoofinance.YahooFinance;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 
 @Service
@@ -48,6 +51,20 @@ public class MessageHandlerService {
     String generateReply(String text) {
         if (text.toLowerCase().contains("не пашет")) {
             return "ПАШИ СУКА";
+        }
+        Currency currency = Currency.containCurrency(text);
+        if (currency != null) {
+            StringBuilder stringBuilder = new StringBuilder(currency.getKey()).append(" нынче по ");
+            String price;
+            try {
+                price = YahooFinance.getFx(currency.getValue()).getPrice().toString();
+            } catch (IOException e) {
+                LOG.error("Error getting FX rate for " + currency.getValue());
+                e.printStackTrace();
+                price = "хрен знает сколько";
+            }
+            stringBuilder.append(price);
+            return stringBuilder.toString();
         }
         return "Посоны, мы пока в КС играем, сорян!";
     }
