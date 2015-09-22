@@ -1,5 +1,6 @@
 package me.antonle.telegrambot.itbot.properties;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
@@ -11,12 +12,14 @@ public enum Currency {
     private String key;
     private String value;
 
-    private static final Map<String, Currency> CURRENCY_MAP = new HashMap<>();
+    private static final Map<String, Currency> CURRENCY_MAP = Collections.unmodifiableMap(initialize());
 
-    static {
-        for (Currency currency : CURRENCY_MAP.values()) {
-            CURRENCY_MAP.put(currency.getKey(), currency);
+    private static Map<String, Currency> initialize() {
+        Map<String, Currency> map = new HashMap<>();
+        for (Currency currency : Currency.values()) {
+            map.put(currency.getKey(), currency);
         }
+        return map;
     }
 
 
